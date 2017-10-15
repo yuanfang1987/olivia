@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {Slider, Button, Select, Input} from 'antd';
+import {Slider, Button, Select, Input, message} from 'antd';
 import fx from './glfx';
 import {uploadPicture, getAllPictures} from '../../actions/picture'
 import './index.less'
@@ -27,6 +27,9 @@ class FxPic extends React.Component {
             step1: 0,
             step2: 0,
             step3: 0,
+            labelName1: '',
+            labelName2: '',
+            labelName3: '',
             prepare: false,
             imageUrl: '', // http://localhost:3000/pic/fengjing.jpg
             imageDesc: ''
@@ -34,6 +37,12 @@ class FxPic extends React.Component {
         this.canvas = null;
         this.image = null;
         this.texture = null;
+    }
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.picture.uploadOK) {
+            message.success('图片上传成功！');
+        }
     }
 
     changePic = () => {
@@ -162,9 +171,11 @@ class FxPic extends React.Component {
                     min1: -1,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '亮度',
                     min2: -1,
                     max2: 1,
                     step2: 0.01,
+                    labelName2: '对比度',
                     filterName: value
                 });
                 break;
@@ -173,9 +184,11 @@ class FxPic extends React.Component {
                     min1: -1,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '色度',
                     min2: -1,
                     max2: 1,
                     step2: 0.01,
+                    labelName2: '饱和度',
                     filterName: value
                 });
                 break;
@@ -184,9 +197,11 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 200,
                     step1: 1,
+                    labelName1: '半径',
                     min2: 0,
                     max2: 5,
                     step2: 0.01,
+                    labelName2: '强度',
                     filterName: value
                 });
                 break;
@@ -195,6 +210,7 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '数量',
                     filterName: value
                 });
                 break;
@@ -203,6 +219,7 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '数量',
                     filterName: value
                 });
                 break;
@@ -211,9 +228,11 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '尺寸',
                     min2: 0,
                     max2: 1,
                     step2: 0.01,
+                    labelName2: '数量',
                     filterName: value
                 });
                 break;
@@ -222,12 +241,15 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 50,
                     step1: 1,
+                    labelName1: '半径',
                     min2: -1,
                     max2: 1,
                     step2: 0.01,
+                    labelName2: '亮度',
                     min3: -3.141592653,
                     max3: 3.141592653,
                     step3: 0.01,
+                    labelName3: '角度',
                     filterName: value
                 });
                 break;
@@ -236,6 +258,7 @@ class FxPic extends React.Component {
                     min1: 0,
                     max1: 1,
                     step1: 0.01,
+                    labelName1: '强度',
                     filterName: value
                 });
                 break;
@@ -243,14 +266,28 @@ class FxPic extends React.Component {
     };
 
     render() {
-        // debug
         const sliders = [];
-        const s1 = <Slider min={this.state.min1} max={this.state.max1} onChange={this.changeParaOne.bind(this)}
-                           value={this.state.value1} step={this.state.step1} key="s1"/>;
-        const s2 = <Slider min={this.state.min2} max={this.state.max2} onChange={this.changeParaTwo.bind(this)}
-                           value={this.state.value2} step={this.state.step2} key="s2"/>;
-        const s3 = <Slider min={this.state.min3} max={this.state.max3} onChange={this.changeParaThree.bind(this)}
-                           value={this.state.value3} step={this.state.step3} key="s3"/>;
+        const s1 = <div key="div1">
+                    {this.state.labelName1}:
+                    <Slider min={this.state.min1}
+                            max={this.state.max1}
+                            onChange={this.changeParaOne.bind(this)}
+                            value={this.state.value1} step={this.state.step1} key="s1"/>
+                    </div>;
+        const s2 = <div key="div2">
+                    {this.state.labelName2}:
+                    <Slider min={this.state.min2}
+                            max={this.state.max2}
+                            onChange={this.changeParaTwo.bind(this)}
+                            value={this.state.value2} step={this.state.step2} key="s2"/>
+                    </div>;
+        const s3 = <div key="div3">
+                    {this.state.labelName3}:
+                    <Slider min={this.state.min3}
+                            max={this.state.max3}
+                            onChange={this.changeParaThree.bind(this)}
+                            value={this.state.value3} step={this.state.step3} key="s3"/>
+                    </div>;
         const newline1 = <br key="line1"/>;
         const newline2 = <br key="line2"/>;
 
@@ -298,7 +335,6 @@ class FxPic extends React.Component {
                 break;
         }
 
-        // end debug
         return (
             <div>
                 <div>
@@ -312,14 +348,14 @@ class FxPic extends React.Component {
                 <br/>
                 选择滤镜：
                 <Select style={{ width: 300 }} placeholder="请选择一个滤镜" onSelect={this.onSelectOption.bind(this)} >
-                    <Option value="brightnessContrast" key="brightnessContrast">brightnessContrast</Option>
-                    <Option value="hueSaturation" key="hueSaturation">hueSaturation</Option>
-                    <Option value="unsharpMask" key="unsharpMask">unsharpMask</Option>
-                    <Option value="noise" key="noise">noise</Option>
-                    <Option value="sepia" key="sepia">sepia</Option>
-                    <Option value="vignette" key="vignette">vignette</Option>
-                    <Option value="lensBlur" key="lensBlur">lensBlur</Option>
-                    <Option value="ink" key="ink">ink</Option>
+                    <Option value="brightnessContrast" key="brightnessContrast">亮度/对比度</Option>
+                    <Option value="hueSaturation" key="hueSaturation">色度/饱和度</Option>
+                    <Option value="unsharpMask" key="unsharpMask">锐利</Option>
+                    <Option value="noise" key="noise">噪点</Option>
+                    <Option value="sepia" key="sepia">怀旧</Option>
+                    <Option value="vignette" key="vignette">光圈</Option>
+                    <Option value="lensBlur" key="lensBlur">模糊</Option>
+                    <Option value="ink" key="ink">墨水</Option>
                 </Select>
 
                 <br/>
@@ -335,7 +371,7 @@ class FxPic extends React.Component {
                 <br/>
 
                 <Button className="btn-login" type='primary' size="large" icon="poweroff"
-                        loading={this.props.load.loading} htmlType='button' onClick={this.handleUpload.bind(this)}>
+                        loading={this.props.picture.loading} htmlType='button' onClick={this.handleUpload.bind(this)}>
                     upload
                 </Button>
             </div>
@@ -344,8 +380,8 @@ class FxPic extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {picture, load} = state;
-    return {picture, load};
+    const {picture} = state;
+    return {picture};
 }
 
 function mapDispatchToProps(dispatch) {

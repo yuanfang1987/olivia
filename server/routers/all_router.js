@@ -34,5 +34,6 @@ router.post('/user/update', user_info_controller.updateUserInfo);
 
 // 处理图片相关的路由
 router.post('/picture/upload', picture_controller.savePicture);
+router.get('/picture/all', picture_controller.getPicturesByUserID);
 
 module.exports = router;

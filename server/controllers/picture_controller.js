@@ -39,3 +39,25 @@ exports.savePicture = function (req, res) {
     });
 
 };
+
+exports.getPicturesByUserID = function(req, res) {
+    /**
+     *
+     * */
+    console.log('enter getPicturesByUserID function');
+    const user_id = req.session.user_id;
+    Picture.findAll({
+        attributes: ['store_path', 'description']
+    }, {
+        where: {
+            user_id: user_id
+        }
+    }).then(pictures => {
+        /** 解析赋值 */
+        res.status(200).json({res_code: 1, pictures});
+    }).catch(err => {
+        console.log('get pictures fail: ', err);
+        res.status(200).json({res_code: 1, error});
+    })
+
+};

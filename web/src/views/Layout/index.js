@@ -5,6 +5,7 @@ import { Route, Link } from 'react-router-dom';
 import IssueSummary from '../Jira';
 import Login from '../login';
 import FxPic from '../MyPic'
+import PicDetails from '../PictureList';
 import './index.less'
 
 
@@ -58,7 +59,7 @@ class App2 extends React.Component {
                             title={<span><Icon type="user" /><span>User</span></span>}
                         >
                             <Menu.Item key="3"><Link to="/changepic">Tom</Link></Menu.Item>
-                            <Menu.Item key="4">Bill</Menu.Item>
+                            <Menu.Item key="4"><Link to="/picturelist">Bill</Link></Menu.Item>
                             <Menu.Item key="5">Alex</Menu.Item>
                         </SubMenu>
                         <SubMenu
@@ -86,6 +87,7 @@ class App2 extends React.Component {
                             <Route path="/login" component={Login} />
                             <Route path="/jiraissues" component={IssueSummary} />
                             <Route path="/changepic" component={FxPic} />
+                            <Route path="/picturelist" component={PicDetails} />
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>

@@ -66,4 +66,8 @@ export default {
         return post('/picture/upload', {base64str, desc});
     },
 
+    getAllPictures() {
+        return get('/picture/all');
+    },
+
 }
