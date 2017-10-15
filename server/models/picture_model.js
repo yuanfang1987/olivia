@@ -8,7 +8,7 @@ const Picture = sequelize.define('picture', {
     user_id: {type: Sequelize.STRING(64), allowNull: false},
     store_path: Sequelize.STRING(255),
     description: Sequelize.STRING(255),
-    status: Sequelize.INTEGER(11),
+    stat: Sequelize.INTEGER(1),
     like_count: Sequelize.INTEGER(11),
     create_time: Sequelize.INTEGER(11),
     update_time: Sequelize.INTEGER(11)

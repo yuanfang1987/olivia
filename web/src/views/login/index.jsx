@@ -8,7 +8,7 @@ import {login, register} from '../../actions/user';
 
 const FormItem = Form.Item;
 
-import './index.less'
+import './index.less';
 
 const propTypes = {
     user: PropTypes.object,
@@ -28,7 +28,6 @@ class Login extends React.Component {
 
     componentWillMount() {
         const {actions} = this.props;
-        //actions.fetchProfile();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -43,15 +42,15 @@ class Login extends React.Component {
             message.error(error);
         }
 
-        if (!isLoggingIn && !error && user) {
-            console.log("Welcome ", user.email);
+        if ( user && !error && !isLoggingIn) {
+            console.log("Welcome ", user.name);
+            message.success('欢迎回来 , ' + user.name + '!');
             this.props.history.replace('/');
-            message.success('Welcome , ' + user.email);
         }
 
-        if (user) {
-            this.props.history.replace('/');
-        }
+        // if (user) {
+        //     this.props.history.replace('/');
+        // }
     }
 
     handleSubmit(e) {
@@ -70,18 +69,18 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('email')(
                                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                                       placeholder='email'/>
+                                       placeholder='邮箱地址'/>
                             )}
                         </FormItem>
                         <FormItem>
                             {getFieldDecorator('password')(
                                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type='password'
-                                       placeholder='password'/>
+                                       placeholder='密码'/>
                             )}
                         </FormItem>
                         <p>
                             <Button className="btn-login" type='primary' size="large" icon="poweroff"
-                                    loading={this.props.load.loading} htmlType='submit'>'Login'</Button>
+                                    loading={this.props.load.loading} htmlType='submit'>登录</Button>
                         </p>
                     </Form>
                 </Col>

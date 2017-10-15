@@ -60,7 +60,49 @@ export function getAllPictures() {
             });
         })
     }
+}
 
-
-
+export function deletePictures(picture_paths) {
+    return function (dispatch) {
+        dispatch({
+            type: actionTypes.DELETE_PICTURE_PENDING
+        });
+        api.deletePictures(picture_paths).then((response) => {
+            console.log('delete pictures response: ', response);
+            const err = processResponse(response);
+            if (!err) {
+                const data = response.data;
+                const message = (data && data.message) ? data.message: '';
+                dispatch({
+                    type: actionTypes.DELETE_PICTURE_SUCCESS,
+                    message: message
+                });
+                /** 在这里直接刷新？ */
+                api.getAllPictures().then(response => {
+                    const err = processResponse(response);
+                    if (!err) {
+                        const data = response.data;
+                        const pictures = (data && data.pictures) ? data.pictures: [];
+                        dispatch({
+                            type: actionTypes.GET_PICTURES_SUCCESS,
+                            pictures: pictures
+                        });
+                    }
+                }).catch(err => {
+                    console.log('get pictures fail: ', err);
+                })
+            } else {
+                dispatch({
+                    type: actionTypes.DELETE_PICTURE_FAIL,
+                    message: 'delete fail'
+                })
+            }
+        }).catch(err => {
+            console.log('delete pictures fail: ', err);
+            dispatch({
+                type: actionTypes.DELETE_PICTURE_FAIL,
+                message: err
+            })
+        })
+    }
 }

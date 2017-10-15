@@ -18,6 +18,7 @@ exports.registerUser = function (req, res) {
      *  {
 	        "email": "201710071110aa@qq.com",
 	        "password": "Aa123456",
+	        "gender": 0, // 0 女， 1 男
 	        "name": "Matt"
         }
      *
@@ -26,6 +27,7 @@ exports.registerUser = function (req, res) {
     const email = body.email;
     const password = utils.cryptPwd(body.password);
     const name = body.name;
+    const gender = body.gender;
 
     console.log('---------register user info---------');
     console.log('email: ', email);
@@ -33,7 +35,7 @@ exports.registerUser = function (req, res) {
 
     const uuid = utils.generateUUID();
     const status = 1;
-    User.create({uuid, email, password, status, name})
+    User.create({uuid, email, password, status, name, gender})
         .then(user => {
             UserInfo.create({uuid: user.uuid}).then(userinfo => {
                 console.log('insert data to user_info table: ', userinfo);

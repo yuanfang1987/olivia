@@ -43,11 +43,11 @@ export default {
     },
 
     logout() {
-        return del('user/logout');
+        return post('user/logout');
     },
 
-    register(email, password) {
-        return post('user/register', {email, password});
+    register(email, password, gender, name) {
+        return post('user/register', {email, password, gender, name});
     },
 
     me() {
@@ -63,11 +63,15 @@ export default {
     },
 
     uploadPicture(base64str, desc) {
-        return post('/picture/upload', {base64str, desc});
+        return post('picture/upload', {base64str, desc});
     },
 
     getAllPictures() {
-        return get('/picture/all');
+        return get('picture/all');
     },
+
+    deletePictures(picture_paths) {
+        return post('picture/destroy', {picture_paths})
+    }
 
 }

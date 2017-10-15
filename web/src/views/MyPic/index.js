@@ -372,7 +372,7 @@ class FxPic extends React.Component {
 
                 <Button className="btn-login" type='primary' size="large" icon="poweroff"
                         loading={this.props.picture.loading} htmlType='button' onClick={this.handleUpload.bind(this)}>
-                    upload
+                    上传
                 </Button>
             </div>
         )

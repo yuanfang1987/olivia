@@ -16,7 +16,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, '../web/dist')));
 
 /** 添加虚拟目录 */
-app.use('/pic', express.static('picture'));
+app.use('/picture', express.static('picture'));
 
 /** 用body parser 来解析post和url信息中的参数 */
 app.use(bodyParser.json({limit : '10000kb'}));
@@ -28,7 +28,7 @@ app.use(morgan('dev'));
 /** 解析 cookie */
 app.use(cookieParser());
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 600000 }}));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 3600000 }}));
 
 app.use('/v1', all_router);
 

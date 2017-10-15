@@ -1,11 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import { Route, Link } from 'react-router-dom';
-import IssueSummary from '../Jira';
+import { Layout, Menu, Icon, message } from 'antd';
+import { Route, Link, Switch, Redirect } from 'react-router-dom';
+import {bindActionCreators} from 'redux';
 import Login from '../login';
+import Register from '../Register';
 import FxPic from '../MyPic'
-import PicDetails from '../PictureList';
+import MyGallery from '../PictureGallery'
+import {login, register, logout} from '../../actions/user';
 import './index.less'
 
 
@@ -24,6 +26,15 @@ class App2 extends React.Component {
         console.log(collapsed);
         this.setState({ collapsed });
     };
+
+    onClickMenuItem ({key}){
+        console.log('click key: ', key);
+        if (key === '6') {
+            console.log('try to logout');
+            this.props.actions.logout();
+        }
+    }
+
     render() {
         return (
             <Layout style={{ minHeight: '100vh' }}>
@@ -33,65 +44,53 @@ class App2 extends React.Component {
                     onCollapse={this.onCollapse}
                 >
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={this.onClickMenuItem.bind(this)}>
                         <Menu.Item key="1">
-                            <Link to="login">
-                                <Icon type="pie-chart" />
+                            <Link to="/">
+                                <Icon type="laptop" />
                                 <span>首页</span>
                             </Link>
                         </Menu.Item>
-
-                        <SubMenu
-                            key="sub1"
-                            title={<span><Icon type="desktop"/>Bug统计</span>}
-                        >
-                            <Menu.Item key="2">
-                                <Link to="/jiraissues">
-                                    <span>Bug趋势</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="21">
-                                    <span>Bug详情</span>
-                            </Menu.Item>
-                        </SubMenu>
+                        <Menu.Item key="2">
+                            <Link to="/register">
+                                <Icon type="user" />
+                                <span>注册</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <Link to="/login">
+                                <Icon type="user" />
+                                <span>登录</span>
+                            </Link>
+                        </Menu.Item>
                         <SubMenu
                             key="sub2"
-                            title={<span><Icon type="user" /><span>User</span></span>}
+                            title={<span><Icon type="folder" /><span>我的图片</span></span>}
                         >
-                            <Menu.Item key="3"><Link to="/changepic">Tom</Link></Menu.Item>
-                            <Menu.Item key="4"><Link to="/picturelist">Bill</Link></Menu.Item>
-                            <Menu.Item key="5">Alex</Menu.Item>
+                            <Menu.Item key="4"><Link to="/changepic">滤镜</Link></Menu.Item>
+                            <Menu.Item key="5"><Link to="/gallery">照片墙</Link></Menu.Item>
                         </SubMenu>
-                        <SubMenu
-                            key="sub3"
-                            title={<span><Icon type="team" /><span>Team</span></span>}
-                        >
-                            <Menu.Item key="6">车载组</Menu.Item>
-                            <Menu.Item key="8">Display组</Menu.Item>
-                            <Menu.Item key="9">Eufy组</Menu.Item>
-                        </SubMenu>
-                        <Menu.Item key="9">
-                            <Icon type="file" />
-                            <span>File</span>
+                        <Menu.Item key="6">
+                                <Icon type="user" />
+                                <span>退出</span>
                         </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout>
                     <Header style={{ background: '#fff', padding: 0 }} />
                     <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                        <Breadcrumb style={{ margin: '12px 0' }}>
-                            <Breadcrumb.Item>User</Breadcrumb.Item>
-                            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                        </Breadcrumb>
                         <div style={{ padding: 24, background: '#fff', minHeight: 650 }}>
-                            <Route path="/login" component={Login} />
-                            <Route path="/jiraissues" component={IssueSummary} />
-                            <Route path="/changepic" component={FxPic} />
-                            <Route path="/picturelist" component={PicDetails} />
+                            <Switch>
+                                <Route exact path="/" render={() => <div><img src="http://localhost:3000/picture/night03.jpeg"/></div>} />
+                                <Route path="/login" component={Login} />
+                                <Route path="/register" component={Register} />
+                                <Route path="/changepic" component={FxPic} />
+                                <Route path="/gallery" component={MyGallery} />
+                            </Switch>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        海翼软件测试中心荣誉出品
+                        olivia.chen 出品
                     </Footer>
                 </Layout>
             </Layout>
@@ -100,8 +99,26 @@ class App2 extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {jira} = state;
-    return {jira};
+    const {auth} = state;
+    return {auth};
 }
 
-export default connect(mapStateToProps)(App2)
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({login, register, logout}, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App2)
+
+/** logout
+ *  <Breadcrumb style={{ margin: '12px 0' }}>
+ <Breadcrumb.Item>User</Breadcrumb.Item>
+ <Breadcrumb.Item>Bill</Breadcrumb.Item>
+ </Breadcrumb>
+
+ render={() => (
+                                    this.props.auth.user ? (<Redirect to="/"/>):(<Login/>))}
+
+
+ * */

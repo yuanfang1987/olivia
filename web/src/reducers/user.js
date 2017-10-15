@@ -4,7 +4,8 @@ const initialState = {
     user: null,
     loggingIn: false,
     loggingOut: false,
-    loginErrors: null
+    loginErrors: null,
+    logoutOK: false
 };
 
 export default function auth(state = initialState, action = {}) {
@@ -15,11 +16,16 @@ export default function auth(state = initialState, action = {}) {
             return {...state, user: user, loggingIn: false, loginErrors: null};
         case actionTypes.LOGIN_ERROR:
             return {...state, user: null, loggingIn: false, loginErrors: action.payload.data.message};
+        case actionTypes.REGISTER_PENDING:
+            return {...state};
         case actionTypes.REGISTER_SUCCESS:
-            let ua = action.payload.data;
-            return {...state, user: ua, loggingIn: false, loginErrors: null};
+            let u = action.payload.user;
+            return {...state, user: u, loggingIn: false, loginErrors: null};
         case actionTypes.REGISTER_ERROR:
             return {...state, user: null, loggingIn: false, loginErrors: action.payload.data.message};
+        case actionTypes.LOGOUT_SUCCESS:
+            console.log('user logout reducer.');
+            return {...state, logoutOK: true, user: null};
         default:
             return state;
     }
