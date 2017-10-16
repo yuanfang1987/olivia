@@ -11,7 +11,7 @@ exports.getUsers = function (req, res) {
 };
 
 
-// 注册用户
+/** 注册用户 */
 exports.registerUser = function (req, res) {
     /**
      *  请求体结构：
@@ -50,7 +50,7 @@ exports.registerUser = function (req, res) {
     })
 };
 
-// 登录
+/** 登录 */
 exports.login = function (req, res) {
     /**
      *  请求体结构：
@@ -78,7 +78,7 @@ exports.login = function (req, res) {
 
 };
 
-// 登出
+/** 登出 */
 exports.logout = function (req, res) {
     if (req.session.user_id) {
         req.session.destroy();

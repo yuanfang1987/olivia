@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../db/conn_pool');
 const utils = require('../utils/common');
 
+/** 与数据库的 users 表的字段一一对应 */
 const User = sequelize.define('user', {
     uuid: {type: Sequelize.STRING(64), primaryKey: true, allowNull: false},
     email: {type: Sequelize.STRING(255), allowNull: false},

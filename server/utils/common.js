@@ -1,18 +1,18 @@
 var crypto = require('crypto');
 var fs = require('fs');
 
-// 对密码进行 md5 加密
+/** 对密码进行 md5 加密 */
 exports.cryptPwd = function (password) {
     var md5 = crypto.createHash('md5');
     return md5.update(password).digest('hex');
 };
 
-// 获取 unix 时间戳
+/** 获取 unix 时间戳 */
 exports.getUnixTime = function () {
     return Math.round(new Date().getTime()/1000);
 };
 
-// 生成 uuid
+/** 生成 uuid */
 exports.generateUUID = function () {
     var s = [];
     var hexDigits = "0123456789abcdef";
@@ -27,7 +27,7 @@ exports.generateUUID = function () {
     return uuid;
 };
 
-// 把 base64编码的字符串解码还原成图片， 已废弃
+/** 把 base64编码的字符串解码还原成图片， 此方法已废弃 */
 exports.decodeBase64ToPicture = function (base64str, file) {
     var str = base64str.replace(/^data:image\/\w+;base64,/, '');
     var bitmap = new Buffer(str, 'base64');

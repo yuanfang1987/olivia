@@ -3,6 +3,7 @@ var Sequelize = require('sequelize');
 var utils = require('../utils/common');
 var Picture = require('../models/picture_model');
 
+/** 把浏览器经过滤镜处理好的图片的 base64 编码还原成图片文件，并保存在 picture目录下，并把保存的路径存入数据库 */
 exports.savePicture = function (req, res) {
     /**
      * 请求体结构
@@ -27,7 +28,7 @@ exports.savePicture = function (req, res) {
             res.status(200).json({res_code: 0, message: err});
         } else {
             console.log('save file success.');
-            // 把路径及图片描述写入数据库
+            /** 把路径及图片描述写入数据库 */
             const uuid = utils.generateUUID();
             const store_path = file_path.replace('./', '');
             Picture.create({uuid, user_id, store_path, description, stat: 1}).then(picture => {
@@ -41,6 +42,7 @@ exports.savePicture = function (req, res) {
 
 };
 
+/** 取当前登录的用户的所有图片，stat 为 1 表示图片未删除 */
 exports.getPicturesByUserID = function(req, res) {
     /**
      *{
@@ -65,6 +67,7 @@ exports.getPicturesByUserID = function(req, res) {
 
 };
 
+/** 删除图片，软删除，仅在数据库中把 stat 字段改为 0， 而并不会真的把图片从硬盘中删除 */
 exports.deletePicturesByUserID = function(req, res){
     console.log('enter deletePicturesByUserID function');
     const user_id = req.session.user_id;

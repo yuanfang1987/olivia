@@ -1,6 +1,6 @@
 const UserInfo = require('../models/user_info_model');
 
-
+/** 更新用户信息 */
 exports.updateUserInfo = function (req, res) {
     const uuid = req.session.user_id;
     const department = req.body.department;

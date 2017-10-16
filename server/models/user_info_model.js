@@ -3,6 +3,7 @@ const sequelize = require('../db/conn_pool');
 const utils = require('../utils/common');
 
 
+/** 与数据库里的 user_info 表的字段一一对应 */
 const UserInfo = sequelize.define('user_info', {
     uuid: {type: Sequelize.STRING(64), primaryKey: true, allowNull: false},
     department: Sequelize.STRING(255),
