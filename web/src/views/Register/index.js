@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {register} from '../../actions/user';
+import actionStatus from '../../actions/actionTypes';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -19,11 +20,11 @@ class Register extends React.Component {
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
         if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
-            if (nextProps.user.status === 'Success') {
+            if (nextProps.user.status === actionStatus.REGISTER_SUCCESS) {
                 message.success('注册成功！终于等到你 , ' + nextProps.user.user.name + '!');
                 this.props.history.replace('/');
-            } else if (nextProps.user.status === 'Fail') {
-                message.error('注册失败！ '+ nextProps.user.loginErrors);
+            } else if (nextProps.user.status === actionStatus.REGISTER_ERROR) {
+                message.error('注册失败！ '+ nextProps.user.message);
             }
         }
 

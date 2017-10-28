@@ -22,10 +22,6 @@ class MyGallery extends React.Component {
     componentWillReceiveProps(nextProps){
         let pictures = nextProps.picture.pictures;
         console.log('next props pictures: ', pictures);
-        // pictures = pictures.map(item => {
-        //     item.store_path = 'http://localhost:3000/' + item.store_path;
-        //     return item;
-        // });
 
         pictures = pictures.map(item => ({
             originPath: item.store_path,

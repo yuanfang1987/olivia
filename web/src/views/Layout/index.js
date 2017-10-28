@@ -8,6 +8,7 @@ import Register from '../Register';
 import FxPic from '../MyPic'
 import MyGallery from '../PictureGallery'
 import {login, register, logout} from '../../actions/user';
+import actionStatus from '../../actions/actionTypes';
 import './index.less'
 
 
@@ -24,8 +25,8 @@ class App2 extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
-        if (nextProps.user.logout_status !== 'NotStarted' && nextProps.user.logout_status !== this.props.user.logout_status) {
-            if (nextProps.user.logout_status === 'Success') {
+        if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
+            if (nextProps.user.status === actionStatus.LOGOUT_SUCCESS) {
                 if (this.props.user.user.name) {
                     message.success('退出成功');
                     this.props.history.replace('/');

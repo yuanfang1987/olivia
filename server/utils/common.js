@@ -1,5 +1,4 @@
 var crypto = require('crypto');
-var fs = require('fs');
 
 /** 对密码进行 md5 加密 */
 exports.cryptPwd = function (password) {
@@ -28,15 +27,15 @@ exports.generateUUID = function () {
 };
 
 /** 把 base64编码的字符串解码还原成图片， 此方法已废弃 */
-exports.decodeBase64ToPicture = function (base64str, file) {
-    var str = base64str.replace(/^data:image\/\w+;base64,/, '');
-    var bitmap = new Buffer(str, 'base64');
-    // fs.writeFileSync(file, bitmap);
-    fs.writeFile(file, bitmap, function (err) {
-        if (err) {
-            console.log('save file fail: ', err)
-        } else {
-            console.log('save file success.')
-        }
-    });
-};
+// exports.decodeBase64ToPicture = function (base64str, file) {
+//     var str = base64str.replace(/^data:image\/\w+;base64,/, '');
+//     var bitmap = new Buffer(str, 'base64');
+//     // fs.writeFileSync(file, bitmap);
+//     fs.writeFile(file, bitmap, function (err) {
+//         if (err) {
+//             console.log('save file fail: ', err)
+//         } else {
+//             console.log('save file success.')
+//         }
+//     });
+// };

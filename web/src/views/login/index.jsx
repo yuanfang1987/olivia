@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {login} from '../../actions/user';
+import actionStatus from '../../actions/actionTypes';
 import './index.less';
 
 const FormItem = Form.Item;
@@ -17,11 +18,11 @@ class Login extends React.Component {
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
         if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
-            if (nextProps.user.status === 'Success') {
+            if (nextProps.user.status === actionStatus.LOGIN_SUCCESS) {
                 message.success('欢迎回来 , ' + nextProps.user.user.name + '!');
                 this.props.history.replace('/');
-            } else if (nextProps.user.status === 'Fail') {
-                message.error('登录失败！ '+ nextProps.user.loginErrors);
+            } else if (nextProps.user.status === actionStatus.LOGIN_ERROR) {
+                message.error('登录失败！ '+ nextProps.user.message);
             }
         }
     }

@@ -44,11 +44,6 @@ exports.savePicture = function (req, res) {
 
 /** 取当前登录的用户的所有图片，stat 为 1 表示图片未删除 */
 exports.getPicturesByUserID = function(req, res) {
-    /**
-     *{
-        attributes: ['store_path', 'description']
-    },
-     * */
     console.log('enter getPicturesByUserID function');
     const user_id = req.session.user_id;
     Picture.findAll({

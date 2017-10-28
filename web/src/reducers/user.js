@@ -2,40 +2,36 @@ import actionTypes from '../actions/actionTypes'
 
 const initialState = {
     user: null,
-    loggingIn: false,
-    loggingOut: false,
-    loginErrors: null,
-    logoutOK: false,
     status: 'NotStarted',
-    logout_status: 'NotStarted',
     message: '',
     loading: false
 };
 
 export default function auth(state = initialState, action = {}) {
-    console.log('user reduce, get action data: ', action.payload);
+    console.log('user reduce, get action: ', action);
     switch (action.type) {
         case actionTypes.LOGIN_PENDING:
-            return {...state, status: 'InProgress', loading: true};
+            return {...state, status: actionTypes.LOGIN_PENDING, loading: true};
         case actionTypes.LOGIN_SUCCESS:
             let user = action.payload.user;
-            return {...state, user: user, loggingIn: false, loginErrors: null, status: 'Success', loading: false};
+            return {...state, user: user, status: actionTypes.LOGIN_SUCCESS, loading: false};
         case actionTypes.LOGIN_ERROR:
-            return {...state, user: null, loading: false, loginErrors: action.payload.data.message, status: 'Fail'};
+            let msg = action.message;
+            return {...state, user: null, loading: false, status: actionTypes.LOGIN_ERROR, message: msg};
         case actionTypes.REGISTER_PENDING:
-            return {...state, status: 'InProgress', loading: true};
+            return {...state, status: actionTypes.REGISTER_PENDING, loading: true};
         case actionTypes.REGISTER_SUCCESS:
             let u = action.payload.user;
-            return {...state, user: u, loading: false, loginErrors: null, status: 'Success'};
+            return {...state, user: u, loading: false, status: actionTypes.REGISTER_SUCCESS};
         case actionTypes.REGISTER_ERROR:
-            return {...state, user: null, loading: false, loginErrors: '邮箱地址已被注册过!', status: 'Fail'};
+            return {...state, user: null, loading: false, message: '邮箱地址已被注册', status: actionTypes.REGISTER_ERROR};
         case actionTypes.LOGOUT_PENDING:
-            return {...state, logout_status: 'InProgress'};
+            return {...state, status: actionTypes.LOGOUT_PENDING};
         case actionTypes.LOGOUT_SUCCESS:
-            return {...state, logoutOK: true, user: null,  logout_status: 'Success'};
+            return {...state, user: null, status: actionTypes.LOGOUT_SUCCESS};
         case actionTypes.LOGOUT_FAIL:
-            let msg = action.message;
-            return {...state, message: msg, logout_status: 'Fail'};
+            let msg1 = action.message;
+            return {...state, message: msg1, status: actionTypes.LOGOUT_FAIL};
         default:
             return state;
     }
