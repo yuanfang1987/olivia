@@ -12,6 +12,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 class FxPic extends React.Component {
+    /** 构造函数 */
     constructor(props) {
         super(props);
         this.state = {
@@ -40,6 +41,7 @@ class FxPic extends React.Component {
         this.texture = null;
     }
 
+    /** 当有新的属性更新时就会触发这个函数 */
     componentWillReceiveProps(nextProps){
         if (nextProps.picture.status !== 'NotStarted' && nextProps.picture.status !== this.props.picture.status) {
             if (nextProps.picture.status === actionStatus.UPLOAD_PICTURE_SUCCESS) {
@@ -51,6 +53,7 @@ class FxPic extends React.Component {
         }
     }
 
+    /** 从本地打开一个图片并显示在网页的时候触发的函数 */
     changePic = () => {
         this.canvas = fx.canvas();
         /** 居中显示 */
@@ -61,6 +64,7 @@ class FxPic extends React.Component {
         this.image.parentNode.insertBefore(this.canvas, this.image);
     };
 
+    /** 拖动滤镜进度条，改变滤镜参数时触发的函数 */
     kiddingMe = () => {
         if (this.canvas === null) {
             this.changePic();
@@ -98,6 +102,7 @@ class FxPic extends React.Component {
         }
     };
 
+    /** 拖动第一个进度条触发的函数 */
     changeParaOne = (value) => {
         this.setState({
                 value1: value,
@@ -107,6 +112,7 @@ class FxPic extends React.Component {
         this.kiddingMe();
     };
 
+    /** 拖动第二个进度条触发的函数 */
     changeParaTwo = (value) => {
         this.setState({
             value2: value,
@@ -115,6 +121,7 @@ class FxPic extends React.Component {
         this.kiddingMe();
     };
 
+    /** 拖动第三个进度条触发的函数 */
     changeParaThree = (value) => {
         this.setState({
             value3: value
@@ -161,6 +168,7 @@ class FxPic extends React.Component {
         read.readAsDataURL(e.target.files[0]);
     };
 
+    /** 图片的描述文字发生变化后触发的函数 */
     onTextAreaChange = (e) => {
         const content = e.target.value;
         this.setState({
@@ -168,6 +176,7 @@ class FxPic extends React.Component {
         });
     };
 
+    /** 选择不同滤镜触发的函数 */
     onSelectOption = (value, option) => {
         switch (value) {
             case 'brightnessContrast':
@@ -269,6 +278,7 @@ class FxPic extends React.Component {
         }
     };
 
+    /** 渲染页面 */
     render() {
         const sliders = [];
         const s1 = <div key="div1">
@@ -383,11 +393,13 @@ class FxPic extends React.Component {
     }
 }
 
+/** 只从 state 状态树中取 picture 这一小部分, 注意这里用到了解构赋值的语法 */
 function mapStateToProps(state) {
     const {picture} = state;
     return {picture};
 }
 
+/** 绑定 uploadPicture 函数 */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({uploadPicture}, dispatch)

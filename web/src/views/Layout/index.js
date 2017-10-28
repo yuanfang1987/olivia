@@ -77,7 +77,7 @@ class App extends React.Component {
                             key="sub2"
                             title={<span><Icon type="folder" /><span>我的图片</span></span>}
                         >
-                            <Menu.Item key="4"><Link to="/changepic">滤镜</Link></Menu.Item>
+                            <Menu.Item key="4"><Link to="/filter">滤镜</Link></Menu.Item>
                             <Menu.Item key="5"><Link to="/gallery">照片墙</Link></Menu.Item>
                         </SubMenu>
                         <Menu.Item key="6">
@@ -94,7 +94,7 @@ class App extends React.Component {
                                                                               height="100%" width="100%"/></div>} />
                                 <Route path="/login" component={Login} />
                                 <Route path="/register" component={Register} />
-                                <Route path="/changepic" component={FxPic} />
+                                <Route path="/filter" component={FxPic} />
                                 <Route path="/gallery" component={MyGallery} />
                             </Switch>
                         </div>
@@ -114,6 +114,7 @@ function mapStateToProps(state) {
     return {user};
 }
 
+/** 绑定 logout 方法 */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({logout}, dispatch)

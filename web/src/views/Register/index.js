@@ -13,10 +13,12 @@ import './index.less';
 
 class Register extends React.Component {
 
+    /** 构造函数 */
     constructor(props) {
         super(props);
     }
 
+    /** 当有新的属性更新时就会触发这个函数 */
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
         if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
@@ -30,12 +32,15 @@ class Register extends React.Component {
 
     }
 
+    /** 点击注册按钮后触发的函数 */
     handleSubmit(e) {
         e.preventDefault();
         const data = this.props.form.getFieldsValue();
+        /** 把用户输入的email,密码，名字、性别， 发给后台 */
         this.props.actions.register(data.email, data.password, data.gender, data.name);
     }
 
+    /** 渲染注册页面 */
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
@@ -81,13 +86,16 @@ class Register extends React.Component {
     }
 }
 
+/** 创建表单组件 */
 Register = Form.create()(Register);
 
+/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法 */
 function mapStateToProps(state) {
     const {user} = state;
     return {user};
 }
 
+/** 绑定 register 函数 */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({register}, dispatch)

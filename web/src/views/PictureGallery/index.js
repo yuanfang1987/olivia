@@ -8,6 +8,7 @@ import {getAllPictures, deletePictures} from '../../actions/picture'
 
 
 class MyGallery extends React.Component {
+    /** 构造函数 */
     constructor(props) {
         super(props);
         this.state = {
@@ -15,10 +16,12 @@ class MyGallery extends React.Component {
         };
     }
 
+    /** 在照片墙页面渲染完成后， 自动向后台服务器发起请求，获取当前用户的照片列表 */
     componentDidMount(){
         this.props.actions.getAllPictures();
     }
 
+    /** 当有新的属性更新时就会触发这个函数 */
     componentWillReceiveProps(nextProps){
         let pictures = nextProps.picture.pictures;
         console.log('next props pictures: ', pictures);
@@ -39,6 +42,7 @@ class MyGallery extends React.Component {
         console.log('pictures on state: ', this.state.images);
     }
 
+    /** 选取照片后触发的函数 */
     onSelectImage (index, image) {
         console.log('select image: ', image);
         let images = this.state.images.slice();
@@ -56,6 +60,7 @@ class MyGallery extends React.Component {
         console.log('after selected: ', this.state.images);
     }
 
+    /** 点击删除按钮后，把要删除的照片的信息发给服务器 */
     onClickDeleteButton(e) {
         e.preventDefault();
         var toBeDeletedArr = [];
@@ -72,6 +77,7 @@ class MyGallery extends React.Component {
         this.props.actions.deletePictures(toBeDeletedArr)
     }
 
+    /** 渲染照片墙页面 */
     render() {
         return (
             <div>
@@ -86,11 +92,13 @@ class MyGallery extends React.Component {
     }
 }
 
+/** 只从 state 状态树中取 picture 这一小部分, 注意这里用到了解构赋值的语法 */
 function mapStateToProps(state) {
     const {picture} = state;
     return {picture};
 }
 
+/** 绑定 getAllPictures， deletePictures 两个函数 */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({getAllPictures, deletePictures}, dispatch)
