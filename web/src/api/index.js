@@ -43,7 +43,7 @@ export default {
     },
 
     logout() {
-        return post('user/logout');
+        return del('user/logout');
     },
 
     register(email, password, gender, name) {

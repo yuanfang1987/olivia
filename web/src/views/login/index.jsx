@@ -26,31 +26,16 @@ class Login extends React.Component {
         super(props);
     }
 
-    componentWillMount() {
-        const {actions} = this.props;
-    }
-
     componentWillReceiveProps(nextProps) {
-        const error = nextProps.loginErrors;
-        const isLoggingIn = nextProps.loggingIn;
-        const user = nextProps.user;
-
         console.log('get next props: ', nextProps);
-        console.log("componentWillReceiveProps, get user object: ", user);
-
-        if (error !== this.props.loginErrors && error) {
-            message.error(error);
+        if (nextProps.auth.status !== 'NotStarted' && nextProps.auth.status !== this.props.auth.status) {
+            if (nextProps.auth.status === 'Success') {
+                message.success('欢迎回来 , ' + nextProps.auth.user.name + '!');
+                this.props.history.replace('/');
+            } else if (nextProps.auth.status === 'Fail') {
+                message.error('登录失败！ '+ nextProps.auth.loginErrors);
+            }
         }
-
-        if ( user && !error && !isLoggingIn) {
-            console.log("Welcome ", user.name);
-            message.success('欢迎回来 , ' + user.name + '!');
-            this.props.history.replace('/');
-        }
-
-        // if (user) {
-        //     this.props.history.replace('/');
-        // }
     }
 
     handleSubmit(e) {
@@ -97,14 +82,8 @@ Login.propTypes = propTypes;
 Login = Form.create()(Login);
 
 function mapStateToProps(state) {
-    const {auth} = state;
-    const {load} = state;
-    // return {auth}
-    if (auth.user) {
-        return {load, user: auth.user, loggingIn: auth.loggingIn, loginErrors: ''};
-    }
-
-    return {load, user: null, loggingIn: auth.loggingIn, loginErrors: auth.loginErrors};
+    const {auth, load} = state;
+    return {auth, load}
 }
 
 function mapDispatchToProps(dispatch) {

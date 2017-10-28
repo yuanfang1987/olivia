@@ -28,7 +28,8 @@ export function register(email, password, gender, name) {
                 }
             })
             .catch((error) => {
-                processError(error);
+                console.log('疯了吗 register, get error');
+                // processError(error);
                 dispatch({
                     type: actionTypes.REGISTER_ERROR
                 });
@@ -38,14 +39,16 @@ export function register(email, password, gender, name) {
 
 export function login(email, password) {
     return function(dispatch) {
-        dispatch(loading(true));
+        dispatch({
+            type: actionTypes.LOGIN_PENDING
+        });
         api.login(email, password)
             .then((response) => {
                 console.log('login response: ', response);
                 const err = processResponse(response);
+                const data = response.data;
                 if(!err){
                     console.log('login success');
-                    const data = response.data;
                     const user = (data && data.user) ? data.user: null;
                     dispatch({
                         type: actionTypes.LOGIN_SUCCESS,
@@ -53,12 +56,20 @@ export function login(email, password) {
                             user
                         }
                     });
+                } else {
+                    const msg = data.message;
+                    dispatch({
+                        type: actionTypes.LOGIN_ERROR,
+                        message: msg
+                    })
                 }
-                dispatch(loading(false));
             })
             .catch((error) => {
                 processError(error);
-                dispatch(loading(false));
+                dispatch({
+                    type: actionTypes.LOGIN_ERROR,
+                    message: error
+                });
             })
     }
 }
@@ -79,16 +90,29 @@ export function me() {
 export function logout() {
     console.log('enter logout()');
     return function(dispatch) {
+        dispatch({
+            type: actionTypes.LOGOUT_PENDING
+        });
         api.logout().then((response) => {
-            message.success('已退出！');
             console.log('logout response: ', response);
-            dispatch({
-                type: actionTypes.LOGOUT_SUCCESS
-            });
+            const data = response.data;
+            const err = processResponse(response);
+            if (!err) {
+                dispatch({
+                    type: actionTypes.LOGOUT_SUCCESS
+                })
+            } else {
+                const msg = data.message;
+                dispatch({
+                    type: actionTypes.LOGOUT_FAIL,
+                    message: msg
+                })
+            }
         }).catch((error) => {
             processError(error);
             dispatch({
-                type: actionTypes.LOGOUT
+                type: actionTypes.LOGOUT_FAIL,
+                message: error
             });
         })
     }

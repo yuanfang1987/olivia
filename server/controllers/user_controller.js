@@ -42,11 +42,11 @@ exports.registerUser = function (req, res) {
                 req.session.user_id = uuid;
                 res.status(200).json({res_code: 1, user});
             }).catch(err => {
-                console.log('insert into user_info table fail: ', err);
-                res.status(200).json({res_code: 0, message: err});
+                console.log('insert into user_info table fail: ', err.toString());
+                res.status(200).json({res_code: 0, message: err.toString()});
             });
     }).catch(err => {
-            res.status(200).json({res_code: 0, message: err});
+            res.status(200).json({res_code: 0, message: err.toString()});
     })
 };
 
@@ -80,9 +80,13 @@ exports.login = function (req, res) {
 
 /** 登出 */
 exports.logout = function (req, res) {
+    console.log('enter logout.');
     if (req.session.user_id) {
+        console.log('found user_id in session');
         req.session.destroy();
-        console.log('logout success.');
+        res.status(200).json({res_code: 1});
+    } else {
+        console.log('not found user_id');
+        res.status(200).json({res_code: 0, message: 'user not login'})
     }
-    res.status(200).json({res_code: 1});
 };

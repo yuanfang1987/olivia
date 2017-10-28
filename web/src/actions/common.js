@@ -19,7 +19,7 @@ export function processResponse(resp) {
 }
 
 export function processError(err) {
-	console.log('processError', err);
+	// console.log('processError', err.toString());
 	if (err) {
 		message.error('Failed to connect server, please try later.');
 		return true;

@@ -20,7 +20,7 @@ router.use(function authController(req, res, next) {
         /** 否则先判断有无 user_id，有则放行，无则拦截，阻止其进一步操作 */
         if (!req.session.user_id) {
             console.log('login require!');
-            res.status(200).json({res_code: 0, message: "user not login!"});
+            res.status(200).json({res_code: 0, message: "用户未登录"});
         } else {
             next();
         }
@@ -31,7 +31,7 @@ router.use(function authController(req, res, next) {
 router.get('/user/fetch-all-users', user_controller.getUsers);
 router.post('/user/register', user_controller.registerUser);
 router.post('/user/login', user_controller.login);
-router.post('/user/logout', user_controller.logout);
+router.delete('/user/logout', user_controller.logout);
 router.post('/user/update', user_info_controller.updateUserInfo);
 
 /** 处理图片相关的路由， 上传图片、删除图片、获取图片 */

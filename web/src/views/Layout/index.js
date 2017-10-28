@@ -11,7 +11,7 @@ import {login, register, logout} from '../../actions/user';
 import './index.less'
 
 
-const { Header, Content, Footer, Sider } = Layout;
+const {Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class App2 extends React.Component {
@@ -22,10 +22,17 @@ class App2 extends React.Component {
         };
     }
 
-    onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
-    };
+    componentWillReceiveProps(nextProps) {
+        console.log('get next props: ', nextProps);
+        if (nextProps.auth.logout_status !== 'NotStarted' && nextProps.auth.logout_status !== this.props.auth.logout_status) {
+            if (nextProps.auth.logout_status === 'Success') {
+                if (this.props.auth.user.name) {
+                    message.success('退出成功');
+                    this.props.history.replace('/');
+                }
+            }
+        }
+    }
 
     onClickMenuItem ({key}){
         console.log('click key: ', key);
@@ -39,9 +46,7 @@ class App2 extends React.Component {
         return (
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider
-                    collapsible
-                    collapsed={this.state.collapsed}
-                    onCollapse={this.onCollapse}
+                    style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}
                 >
                     <div className="logo" />
                     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={this.onClickMenuItem.bind(this)}>
@@ -76,12 +81,12 @@ class App2 extends React.Component {
                         </Menu.Item>
                     </Menu>
                 </Sider>
-                <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }} />
+                <Layout style={{ marginLeft: 200 }}>
                     <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                        <div style={{ padding: 24, background: '#fff', minHeight: 650 }}>
+                        <div style={{ padding: 24, background: '#fff', minHeight: 800 }}>
                             <Switch>
-                                <Route exact path="/" render={() => <div><img src="http://localhost:3000/picture/night03.jpeg"/></div>} />
+                                <Route exact path="/" render={() => <div><img src="http://localhost:3000/picture/home.jpg"
+                                                                              height="100%" width="100%"/></div>} />
                                 <Route path="/login" component={Login} />
                                 <Route path="/register" component={Register} />
                                 <Route path="/changepic" component={FxPic} />
@@ -111,14 +116,3 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App2)
 
-/** logout
- *  <Breadcrumb style={{ margin: '12px 0' }}>
- <Breadcrumb.Item>User</Breadcrumb.Item>
- <Breadcrumb.Item>Bill</Breadcrumb.Item>
- </Breadcrumb>
-
- render={() => (
-                                    this.props.auth.user ? (<Redirect to="/"/>):(<Login/>))}
-
-
- * */

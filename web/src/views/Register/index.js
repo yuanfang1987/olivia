@@ -28,28 +28,21 @@ class Register extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const error = nextProps.loginErrors;
-        const isLoggingIn = nextProps.loggingIn;
-        const user = nextProps.user;
-
         console.log('get next props: ', nextProps);
-        console.log("componentWillReceiveProps, get user object: ", user);
-
-        if (error !== this.props.loginErrors && error) {
-            message.error(error);
+        if (nextProps.auth.status !== 'NotStarted' && nextProps.auth.status !== this.props.auth.status) {
+            if (nextProps.auth.status === 'Success') {
+                message.success('终于等到你 , ' + nextProps.auth.user.name + '!');
+                this.props.history.replace('/');
+            } else if (nextProps.auth.status === 'Fail') {
+                message.error('注册失败！ '+ nextProps.auth.loginErrors);
+            }
         }
 
-        if ( user && !error && !isLoggingIn) {
-            console.log("Welcome ", user.name);
-            message.success('终于等到你, ' + user.name + ' !');
-            this.props.history.replace('/');
-        }
     }
 
     handleSubmit(e) {
         e.preventDefault();
         const data = this.props.form.getFieldsValue();
-        // this.props.actions.login(data.email, data.password);
         this.props.actions.register(data.email, data.password, data.gender, data.name);
     }
 
@@ -105,14 +98,8 @@ Register.propTypes = propTypes;
 Register = Form.create()(Register);
 
 function mapStateToProps(state) {
-    const {auth} = state;
-    const {load} = state;
-    // return {auth}
-    if (auth.user) {
-        return {load, user: auth.user, loggingIn: auth.loggingIn, loginErrors: ''};
-    }
-
-    return {load, user: null, loggingIn: auth.loggingIn, loginErrors: auth.loginErrors};
+    const {auth, load} = state;
+    return {auth, load};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -122,5 +109,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register))
-
-// onChange={this.onChange} value={this.state.value}
