@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {Slider, Button, Select, Input, message} from 'antd';
 import fx from './glfx';
-import {uploadPicture, getAllPictures} from '../../actions/picture'
+import {uploadPicture} from '../../actions/picture';
+import actionStatus from '../../actions/actionTypes';
 import './index.less'
 
 const { Option } = Select;
@@ -31,7 +32,7 @@ class FxPic extends React.Component {
             labelName2: '',
             labelName3: '',
             prepare: false,
-            imageUrl: '', // http://localhost:3000/pic/fengjing.jpg
+            imageUrl: '',
             imageDesc: ''
         };
         this.canvas = null;
@@ -40,8 +41,13 @@ class FxPic extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if (nextProps.picture.uploadOK) {
-            message.success('图片上传成功！');
+        if (nextProps.picture.status !== 'NotStarted' && nextProps.picture.status !== this.props.picture.status) {
+            if (nextProps.picture.status === actionStatus.UPLOAD_PICTURE_SUCCESS) {
+                message.success('图片上传成功！');
+            } else if (nextProps.picture.status === actionStatus.UPLOAD_PICTURE_FAIL) {
+                message.error('图片上传失败! ')
+            }
+
         }
     }
 
@@ -53,8 +59,6 @@ class FxPic extends React.Component {
         this.texture = this.canvas.texture(this.image);
         this.canvas.draw(this.texture).hueSaturation(this.state.value1, this.state.value2).update();
         this.image.parentNode.insertBefore(this.canvas, this.image);
-        // this.image.parentNode.removeChild(this.image);
-        // texture.destroy();
     };
 
     kiddingMe = () => {
@@ -386,7 +390,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({uploadPicture, getAllPictures}, dispatch)
+        actions: bindActionCreators({uploadPicture}, dispatch)
     }
 }
 

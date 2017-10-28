@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import { withRouter } from 'react-router-dom';
 import Gallery from 'react-grid-gallery';
 import {Button} from 'antd';
-import {uploadPicture, getAllPictures, deletePictures} from '../../actions/picture'
+import {getAllPictures, deletePictures} from '../../actions/picture'
 
 
 class MyGallery extends React.Component {
@@ -93,7 +93,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({uploadPicture, getAllPictures, deletePictures}, dispatch)
+        actions: bindActionCreators({getAllPictures, deletePictures}, dispatch)
     }
 }
 

@@ -7,7 +7,7 @@ import Login from '../login';
 import Register from '../Register';
 import FxPic from '../MyPic'
 import MyGallery from '../PictureGallery'
-import {login, register, logout} from '../../actions/user';
+import {logout} from '../../actions/user';
 import actionStatus from '../../actions/actionTypes';
 import './index.less'
 
@@ -15,7 +15,8 @@ import './index.less'
 const {Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
-class App2 extends React.Component {
+class App extends React.Component {
+    /** 构造函数 */
     constructor(props) {
         super(props);
         this.state = {
@@ -23,18 +24,21 @@ class App2 extends React.Component {
         };
     }
 
+    /** 当有新的属性更新时就会触发这个函数 */
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
         if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
             if (nextProps.user.status === actionStatus.LOGOUT_SUCCESS) {
                 if (this.props.user.user.name) {
                     message.success('退出成功');
+                    /** 不管当前处在哪个页面，退出成功后，都要强制返回首页 */
                     this.props.history.replace('/');
                 }
             }
         }
     }
 
+    /** 点击左侧菜单时触发的函数，如果点击到 key 等于6 的菜单，就是执行退出操作 */
     onClickMenuItem ({key}){
         console.log('click key: ', key);
         if (key === '6') {
@@ -104,6 +108,7 @@ class App2 extends React.Component {
     }
 }
 
+/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法 */
 function mapStateToProps(state) {
     const {user} = state;
     return {user};
@@ -111,9 +116,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({login, register, logout}, dispatch)
+        actions: bindActionCreators({logout}, dispatch)
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App2)
-
+export default connect(mapStateToProps, mapDispatchToProps)(App)

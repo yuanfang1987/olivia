@@ -1,9 +1,9 @@
 import React  from 'react';
 import { Route } from 'react-router-dom';
-import App2 from '../views/Layout'
+import App from '../views/Layout'
 
 const routes = (
-    <Route path="/" component={App2}/>
+    <Route path="/" component={App}/>
 );
 
 export default routes
