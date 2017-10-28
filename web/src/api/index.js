@@ -54,14 +54,6 @@ export default {
         return get('user/me');
     },
 
-    getJiraIssues(project_id, start_date, end_date) {
-        return post('jira/issues', {project_id, start_date, end_date});
-    },
-
-    filterIssues(project_id) {
-        return post('jira/filter-issues', {project_id});
-    },
-
     uploadPicture(base64str, desc) {
         return post('picture/upload', {base64str, desc});
     },

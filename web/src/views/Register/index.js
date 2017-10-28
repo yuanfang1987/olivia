@@ -1,25 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Form, Input, Button, Row, Col, Icon, message, Radio} from 'antd';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {login, register} from '../../actions/user';
+import {register} from '../../actions/user';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
 import './index.less';
-
-const propTypes = {
-    user: PropTypes.object,
-    loggingIn: PropTypes.bool,
-    loginErrors: PropTypes.string
-};
-
-const contextTypes = {
-    store: PropTypes.object.isRequired
-};
 
 class Register extends React.Component {
 
@@ -29,12 +18,12 @@ class Register extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
-        if (nextProps.auth.status !== 'NotStarted' && nextProps.auth.status !== this.props.auth.status) {
-            if (nextProps.auth.status === 'Success') {
-                message.success('终于等到你 , ' + nextProps.auth.user.name + '!');
+        if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
+            if (nextProps.user.status === 'Success') {
+                message.success('注册成功！终于等到你 , ' + nextProps.user.user.name + '!');
                 this.props.history.replace('/');
-            } else if (nextProps.auth.status === 'Fail') {
-                message.error('注册失败！ '+ nextProps.auth.loginErrors);
+            } else if (nextProps.user.status === 'Fail') {
+                message.error('注册失败！ '+ nextProps.user.loginErrors);
             }
         }
 
@@ -81,7 +70,7 @@ class Register extends React.Component {
                         </FormItem>
                         <p>
                             <Button className="btn-login" type='primary' size="large" icon="poweroff"
-                                    loading={this.props.load.loading} htmlType='submit'>注册</Button>
+                                    loading={this.props.user.loading} htmlType='submit'>注册</Button>
                         </p>
                     </Form>
                 </Col>
@@ -91,20 +80,16 @@ class Register extends React.Component {
     }
 }
 
-Register.contextTypes = contextTypes;
-
-Register.propTypes = propTypes;
-
 Register = Form.create()(Register);
 
 function mapStateToProps(state) {
-    const {auth, load} = state;
-    return {auth, load};
+    const {user} = state;
+    return {user};
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({login, register}, dispatch)
+        actions: bindActionCreators({register}, dispatch)
     }
 }
 

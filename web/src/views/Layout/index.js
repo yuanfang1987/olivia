@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { Layout, Menu, Icon, message } from 'antd';
-import { Route, Link, Switch, Redirect } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import Login from '../login';
 import Register from '../Register';
@@ -24,9 +24,9 @@ class App2 extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
-        if (nextProps.auth.logout_status !== 'NotStarted' && nextProps.auth.logout_status !== this.props.auth.logout_status) {
-            if (nextProps.auth.logout_status === 'Success') {
-                if (this.props.auth.user.name) {
+        if (nextProps.user.logout_status !== 'NotStarted' && nextProps.user.logout_status !== this.props.user.logout_status) {
+            if (nextProps.user.logout_status === 'Success') {
+                if (this.props.user.user.name) {
                     message.success('退出成功');
                     this.props.history.replace('/');
                 }
@@ -104,8 +104,8 @@ class App2 extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth} = state;
-    return {auth};
+    const {user} = state;
+    return {user};
 }
 
 function mapDispatchToProps(dispatch) {

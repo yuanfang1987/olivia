@@ -66,6 +66,9 @@ module.exports = {
                         options: {
                             limit: 10240
                         }
+                    },
+                    {
+                        loader: "file-loader"
                     }
                 ]
             }

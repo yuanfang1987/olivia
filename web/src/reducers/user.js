@@ -8,26 +8,27 @@ const initialState = {
     logoutOK: false,
     status: 'NotStarted',
     logout_status: 'NotStarted',
-    message: ''
+    message: '',
+    loading: false
 };
 
 export default function auth(state = initialState, action = {}) {
     console.log('user reduce, get action data: ', action.payload);
     switch (action.type) {
         case actionTypes.LOGIN_PENDING:
-            return {...state, status: 'InProgress'};
+            return {...state, status: 'InProgress', loading: true};
         case actionTypes.LOGIN_SUCCESS:
             let user = action.payload.user;
-            return {...state, user: user, loggingIn: false, loginErrors: null, status: 'Success'};
+            return {...state, user: user, loggingIn: false, loginErrors: null, status: 'Success', loading: false};
         case actionTypes.LOGIN_ERROR:
-            return {...state, user: null, loggingIn: false, loginErrors: action.payload.data.message, status: 'Fail'};
+            return {...state, user: null, loading: false, loginErrors: action.payload.data.message, status: 'Fail'};
         case actionTypes.REGISTER_PENDING:
-            return {...state, status: 'InProgress'};
+            return {...state, status: 'InProgress', loading: true};
         case actionTypes.REGISTER_SUCCESS:
             let u = action.payload.user;
-            return {...state, user: u, loggingIn: false, loginErrors: null, status: 'Success'};
+            return {...state, user: u, loading: false, loginErrors: null, status: 'Success'};
         case actionTypes.REGISTER_ERROR:
-            return {...state, user: null, loggingIn: false, loginErrors: '邮箱地址已被注册过!', status: 'Fail'};
+            return {...state, user: null, loading: false, loginErrors: '邮箱地址已被注册过!', status: 'Fail'};
         case actionTypes.LOGOUT_PENDING:
             return {...state, logout_status: 'InProgress'};
         case actionTypes.LOGOUT_SUCCESS:

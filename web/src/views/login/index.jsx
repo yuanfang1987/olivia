@@ -1,24 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Form, Input, Button, Row, Col, Icon, message} from 'antd';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {login, register} from '../../actions/user';
-
-const FormItem = Form.Item;
-
+import {login} from '../../actions/user';
 import './index.less';
 
-const propTypes = {
-    user: PropTypes.object,
-    loggingIn: PropTypes.bool,
-    loginErrors: PropTypes.string
-};
-
-const contextTypes = {
-    store: PropTypes.object.isRequired
-};
+const FormItem = Form.Item;
 
 class Login extends React.Component {
 
@@ -28,12 +16,12 @@ class Login extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('get next props: ', nextProps);
-        if (nextProps.auth.status !== 'NotStarted' && nextProps.auth.status !== this.props.auth.status) {
-            if (nextProps.auth.status === 'Success') {
-                message.success('欢迎回来 , ' + nextProps.auth.user.name + '!');
+        if (nextProps.user.status !== 'NotStarted' && nextProps.user.status !== this.props.user.status) {
+            if (nextProps.user.status === 'Success') {
+                message.success('欢迎回来 , ' + nextProps.user.user.name + '!');
                 this.props.history.replace('/');
-            } else if (nextProps.auth.status === 'Fail') {
-                message.error('登录失败！ '+ nextProps.auth.loginErrors);
+            } else if (nextProps.user.status === 'Fail') {
+                message.error('登录失败！ '+ nextProps.user.loginErrors);
             }
         }
     }
@@ -65,7 +53,7 @@ class Login extends React.Component {
                         </FormItem>
                         <p>
                             <Button className="btn-login" type='primary' size="large" icon="poweroff"
-                                    loading={this.props.load.loading} htmlType='submit'>登录</Button>
+                                    loading={this.props.user.loading} htmlType='submit'>登录</Button>
                         </p>
                     </Form>
                 </Col>
@@ -75,20 +63,16 @@ class Login extends React.Component {
     }
 }
 
-Login.contextTypes = contextTypes;
-
-Login.propTypes = propTypes;
-
 Login = Form.create()(Login);
 
 function mapStateToProps(state) {
-    const {auth, load} = state;
-    return {auth, load}
+    const {user} = state;
+    return {user}
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({login, register}, dispatch)
+        actions: bindActionCreators({login}, dispatch)
     }
 }
 

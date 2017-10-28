@@ -9,7 +9,7 @@ const initState = {
 };
 
 export default function picture(state = initState, action = {}) {
-    console.log('jira reducer, get action data: ', action);
+    console.log('picture reducer, get action data: ', action);
     switch (action.type) {
         case actionTypes.UPLOAD_PICTURE_PENDING:
             return {...state, loading: true};
