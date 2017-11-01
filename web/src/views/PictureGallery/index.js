@@ -74,6 +74,7 @@ class MyGallery extends React.Component {
             }
         }
         console.log('to be delete images: ', toBeDeletedArr);
+        /** 把要删除的图片（一个或两个以上），的路径发给服务器 */
         this.props.actions.deletePictures(toBeDeletedArr)
     }
 

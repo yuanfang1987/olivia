@@ -149,6 +149,7 @@ class FxPic extends React.Component {
         if (this.texture !== null) {
             this.texture.destroy();
         }
+        /** 如果之前已经选择过图片，则要把它清空 */
         if (this.canvas !== null) {
             this.image.parentNode.removeChild(this.canvas);
             this.canvas = null;
@@ -406,4 +407,5 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
+/** 把当前组件 FxPic 跟状态树state关联起来 */
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FxPic))

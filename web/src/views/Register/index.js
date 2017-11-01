@@ -35,41 +35,52 @@ class Register extends React.Component {
     /** 点击注册按钮后触发的函数 */
     handleSubmit(e) {
         e.preventDefault();
-        const data = this.props.form.getFieldsValue();
-        /** 把用户输入的email,密码，名字、性别， 发给后台 */
-        this.props.actions.register(data.email, data.password, data.gender, data.name);
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('get values from register form: ', values);
+                /** 把用户输入的email,密码，名字、性别， 发给后台 */
+                this.props.actions.register(values.email, values.password, values.gender, values.name);
+            }
+        });
     }
 
     /** 渲染注册页面 */
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Row className="login-row" type="flex" justify="space-around" align="middle">
-                <Col span="8">
-                    <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)} className="login-form">
-                        <h2 className="logo"><span>logo</span></h2>
+                    <div style={{ textAlign: 'center' }}>
+                    <Form onSubmit={this.handleSubmit.bind(this)} style={{maxWidth: 300, margin: '0 auto'}}>
                         <FormItem>
-                            {getFieldDecorator('email')(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                                       placeholder='邮箱地址'/>
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('name')(
+                            {getFieldDecorator('name', {
+                                rules: [{ required: true, message: '请输入用户名'}]
+                            })(
                                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
                                        placeholder='用户名'/>
                             )}
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('gender')(
-                                <RadioGroup>
+                            {getFieldDecorator('gender', {
+                                rules: [{ required: true, message: '请选择性别'}]
+                            })(
+                                <RadioGroup style={{float: 'left'}}>
                                     <Radio value={1}>男</Radio>
                                     <Radio value={0}>女</Radio>
                                 </RadioGroup>
                             )}
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('password')(
+                            {getFieldDecorator('email', {
+                                rules: [{type: 'email', message: '邮箱地址格式非法'},
+                                    { required: true, message: '请输入邮箱地址' }]
+                            })(
+                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+                                       placeholder='邮箱地址'/>
+                            )}
+                        </FormItem>
+                        <FormItem>
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: '请输入密码'}]
+                            })(
                                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type='password'
                                        placeholder='密码'/>
                             )}
@@ -79,9 +90,7 @@ class Register extends React.Component {
                                     loading={this.props.user.loading} htmlType='submit'>注册</Button>
                         </p>
                     </Form>
-                </Col>
-            </Row>
-
+                    </div>
         )
     }
 }

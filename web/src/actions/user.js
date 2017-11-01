@@ -1,8 +1,8 @@
 import api from '../api'
 import actionTypes from './actionTypes'
-import {message} from 'antd';
 import {loading, processError, processResponse} from './common'
 
+/** 注册 */
 export function register(email, password, gender, name) {
     return function(dispatch) {
         dispatch({
@@ -37,6 +37,7 @@ export function register(email, password, gender, name) {
     }
 }
 
+/** 登录 */
 export function login(email, password) {
     return function(dispatch) {
         dispatch({
@@ -74,6 +75,7 @@ export function login(email, password) {
     }
 }
 
+/** 此方法未使用，预留 */
 export function me() {
     console.log('enter me()');
     return function(dispatch) {
@@ -87,6 +89,7 @@ export function me() {
     }
 }
 
+/** 登出 */
 export function logout() {
     console.log('enter logout()');
     return function(dispatch) {

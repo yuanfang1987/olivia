@@ -1,6 +1,7 @@
 import startsWith from 'lodash/startsWith';
 import axios from 'axios';
 
+/** 设置超时时间 */
 const client = axios.create({
     timeout: 180000
 });
@@ -50,6 +51,7 @@ export default {
         return post('user/register', {email, password, gender, name});
     },
 
+    /** 此方法未使用，预留 */
     me() {
         return get('user/me');
     },

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input, Button, Row, Col, Icon, message} from 'antd';
+import {Form, Input, Button, Icon, message} from 'antd';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -32,39 +32,48 @@ class Login extends React.Component {
     /** 点击登录按钮后触发的函数 */
     handleSubmit(e) {
         e.preventDefault();
-        /** 获取表单的值，也就是用户输入的 email 和 password */
-        const data = this.props.form.getFieldsValue();
-        /** 把用户名和密码发送给后台服务器 */
-        this.props.actions.login(data.email, data.password)
+        this.props.form.validateFields((err, values) => {
+            /** 检查校验规则有没有报错，如果没有，则把邮箱和密码发给服务器 */
+            if (!err) {
+                console.log('get value from login form: ', values);
+                /** 把用户名和密码发送给后台服务器 */
+                this.props.actions.login(values.email, values.password)
+            }
+        });
     }
 
-    /** 渲染登录页面 */
+    /** 渲染登录页面
+     *  里面就是一个 Form 表单而已， 两个输入框和一个登录按钮.
+     *  注意 Button 的 htmlType 是 "submit", 当Button被点击时，触发整个Form被提交，也就导致了
+     *  Form的 onSubmit 属性绑定的函数 handleSubmit 被触发
+     * */
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Row className="login-row" type="flex" justify="space-around" align="middle">
-                <Col span="8">
-                    <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)} className="login-form">
-                        <h2 className="logo"><span>logo</span></h2>
-                        <FormItem>
-                            {getFieldDecorator('email')(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                                       placeholder='邮箱地址'/>
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('password')(
-                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type='password'
-                                       placeholder='密码'/>
-                            )}
-                        </FormItem>
-                        <p>
-                            <Button className="btn-login" type='primary' size="large" icon="poweroff"
-                                    loading={this.props.user.loading} htmlType='submit'>登录</Button>
-                        </p>
-                    </Form>
-                </Col>
-            </Row>
+                <div style={{ textAlign: 'center' }}>
+                <Form onSubmit={this.handleSubmit.bind(this)} style={{maxWidth: 300, margin: '0 auto'}}>
+                    <FormItem>
+                        {getFieldDecorator('email', {
+                            rules: [{type: 'email', message: '邮箱地址格式非法'},
+                                { required: true, message: '请输入邮箱地址' }]
+                        })(
+                            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="邮箱地址" />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: '请输入密码'}]
+                        })(
+                            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password"
+                                   placeholder="密码" />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        <Button className="btn-login" type='primary' size="large" icon="poweroff"
+                                loading={this.props.user.loading} htmlType='submit'>登录</Button>
+                    </FormItem>
+                </Form>
+                </div>
 
         )
     }
@@ -73,17 +82,22 @@ class Login extends React.Component {
 /** 创建表单组件 */
 Login = Form.create()(Login);
 
-/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法 */
+/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法
+ * const {user} = state 相当于 const user = state.user
+ * */
 function mapStateToProps(state) {
     const {user} = state;
     return {user}
 }
 
-/** 绑定 login 函数 */
+/** 绑定 login 函数
+ *  给 handleSubmit 回调函数使用
+ * */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({login}, dispatch)
     }
 }
 
+/** 把当前组件 Login 跟状态树state关联起来 */
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))

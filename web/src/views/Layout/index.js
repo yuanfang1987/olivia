@@ -1,6 +1,10 @@
+/** 导入 React框架 */
 import React from 'react';
+/** 导入 redux 框架 */
 import {connect} from 'react-redux';
+/** 从蚂蚁金服的开源UI组件里导入一个预定义好的组件元素 */
 import { Layout, Menu, Icon, message } from 'antd';
+/** 导入跟页面跳转相关的路由组件 */
 import { Route, Link, Switch } from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import Login from '../login';
@@ -47,6 +51,11 @@ class App extends React.Component {
         }
     }
 
+    /**
+     * 首页布局，所有的布局元素都是放在 Layout 里面，
+     * Sider 是左侧的菜单栏，里面主要有一些 Menu 元素
+     * 紧接着 Sider 的是右边的用来显示主要内容的布局，里面嵌套了一个 Layout，然后 Layout里面有 Content
+     * */
     render() {
         return (
             <Layout style={{ minHeight: '100vh' }}>
@@ -108,17 +117,22 @@ class App extends React.Component {
     }
 }
 
-/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法 */
+/** 只从 state 状态树中取 user 这一小部分, 注意这里用到了解构赋值的语法
+ *  const {user} = state 相当于 const user = state.user
+ * */
 function mapStateToProps(state) {
     const {user} = state;
     return {user};
 }
 
-/** 绑定 logout 方法 */
+/** 绑定 logout 方法到 props，以便可以通过 this.props.actions.logout() 来调用
+ *  在这个Layout 布局文件中， 主要是给 onClickMenuItem 回调函数使用
+ * */
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({logout}, dispatch)
     }
 }
 
+/** 把当前组件App跟状态树state关联起来 */
 export default connect(mapStateToProps, mapDispatchToProps)(App)
